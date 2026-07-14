@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torchvision
 from torchvision import datasets, transforms
+import matplotlib.pyplot as plt
 
 transform = transforms.Compose([
     transforms.ToTensor(),  # 转为张量
@@ -68,3 +69,16 @@ with torch.no_grad():  # 评估时不需要计算梯度
 
 accuracy = 100 * correct / total
 print(f"Test Accuracy: {accuracy:.2f}%")
+
+# 6. 可视化测试结果
+dataiter = iter(test_loader)
+images, labels = next(dataiter)
+outputs = model(images)
+_, predictions = torch.max(outputs, 1)
+
+fig, axes = plt.subplots(1, 6, figsize=(12, 4))
+for i in range(6):
+    axes[i].imshow(images[i][0], cmap='gray')
+    axes[i].set_title(f"Label: {labels[i]}\nPred: {predictions[i]}")
+    axes[i].axis('off')
+plt.show()
